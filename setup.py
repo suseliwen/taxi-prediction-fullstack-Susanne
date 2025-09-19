@@ -5,7 +5,10 @@ setup(
     version="0.0.1",
     description="This package contains taxipred app which predict taxi prices",
     author="Susanne W",
-    install_requires=["streamlit", "pandas", "fastapi", "scikit-learn", "uvicorn"],
+    install_requires=["streamlit", "pandas", "fastapi", "scikit-learn", "uvicorn" ],
+    extras_require={
+        "eda": ["matplotlib", "seaborn", "jupyter", "notebook"],
+    },
     package_dir={"": "src"},                  # koden ligger under src/
     packages=find_packages(where="src"),      # hitta paket under src/
     package_data={"taxipred": ["data/*.csv"]},
