@@ -13,6 +13,7 @@ class TaxiData:
         return json.loads(self.df.to_json(orient = "records"))
     
 
+print(df.info())
 
 # taxi = TaxiData().to_json()
 
