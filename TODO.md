@@ -7,17 +7,17 @@
 - [X] Sätt upp så att datan kan visualiseras i Streamlit
 
 ##### Uppgift 1 - EDA och data cleaning
-- [ ] Gör explorativa dataanalyser
-- [ ] Gå igenom nullvärden i datasetet, och hitta sätt att hantera dem
-- [ ] Ta bort eventuella outliers
-- [ ] Exportera den städade datan, och använd den fortsatt i applikationen
+- [X] Gör explorativa dataanalyser
+- [X] Gå igenom nullvärden i datasetet, och hitta sätt att hantera dem
+- [X] Undersök om och hur ev. outliers påverkar datan och hantera dem. 
+- [X] Exportera den städade datan till en ny csv-fil, och använd den fortsatt i applikationen
  
 ##### Uppgift 2 -  ML modell
 Ta fram en ML modell för att prediktera taxipriser. Gå igenom data science workflow, med att testa olika
 modeller och evaluera. Välj därefter en modell och träna på all data. Exportera därefter datan med hjälp av
 joblib 
-- [ ] 
-.
+- [ ] .
+
 
 ##### Uppgift 3 -  Backend och API-lager
 Skapa en backend och ett API-lager i FastAPI som ska servea datan. Det innebär att det ska finnas olika
