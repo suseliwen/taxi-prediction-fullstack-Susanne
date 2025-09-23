@@ -13,19 +13,17 @@
 - [X] Exportera den städade datan till en ny csv-fil, och använd den fortsatt i applikationen
  
 ##### **Uppgift 2 -  ML modell**
-Ta fram en ML modell för att prediktera taxipriser. Gå igenom data science workflow, med att testa olika
-modeller och evaluera. Välj därefter en modell och träna på all data. Exportera därefter datan med hjälp av
+Ta fram en ML modell för att prediktera taxipriser. Gå igenom data science workflow, med att testa olika modeller och evaluera. Välj därefter en modell och träna på all data. Exportera därefter datan med hjälp av
 joblib 
 - [X] Testat olika modeller i Jupyter NoteBook och bestämt mig för en modell
-- [ ] Träna datan på den bestämda modellen (görs i en .py-fil)
-- [ ] Exportera datan med hjälp av joblib
+- [X] Träna datan på den bestämda modellen
+- [X] Exportera datan med hjälp av joblib
 
 ##### **Uppgift 3 -  Backend och API-lager**
 Skapa en backend och ett API-lager i FastAPI som ska servea datan. Det innebär att det ska finnas olika
 endpoints för att kunna läsa delar av datan. Det ska också finnas möjlighet att göra prediktion genom att
 låta användaren mata in olika parametrar.
 - [ ] Vilka endpoints ska jag ha?
-
 
 
 ##### **Uppgift 4 -   Bygg en frontend**
