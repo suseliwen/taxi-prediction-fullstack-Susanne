@@ -1,7 +1,8 @@
 
-from importlib.resources import files
-
-TAXI_CSV_PATH = files("taxipred").joinpath("data/cleaned_taxi_trip_pricing.csv") #absolute path to the csv-file in data
+from pathlib import Path
 
 
-print(TAXI_CSV_PATH)
+MODELS_PATH = Path(__file__).parents[1]/"models"  
+DATA_PATH = Path(__file__).parents[1]/"data"  
+
+print(MODELS_PATH)
