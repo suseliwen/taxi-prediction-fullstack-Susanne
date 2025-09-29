@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.responses import RedirectResponse          #Används för att omdirigera root ("/") till docs
 from taxipred.backend.data_processing import TaxiData
 from pydantic import BaseModel, Field
@@ -42,14 +42,26 @@ async def root():
     """
     return RedirectResponse("/docs")
 
-@app.get("/summary") 
+@app.get("/api/summary") 
 async def summary():
     """
     Skriver ut översikt av den laddade datan"""
     data = DataExplorer(app.state.df)
 
     return data.summary().json_response()
-   
+
+@app.get("/api")
+async def read_limited_taxi_data(limit: int = Query(25, gt= 1, lt = 100)): #Query => Använd frågetecken för att skriva in antal rader man vill se
+    data = DataExplorer(app.state.df, limit)
+    return data.json_response()
+
+@app.get("/api/kpis")
+async def get_kpis():
+    """
+    Visar kpi:er
+    """
+    data = DataExplorer(app.state.df)
+    return data.kpis()
    
 
 @app.get("/taxi")

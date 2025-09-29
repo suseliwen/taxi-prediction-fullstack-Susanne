@@ -7,13 +7,32 @@ from pprint import pprint
 df = pd.read_csv(DATA_PATH / "cleaned_taxi_trip_pricing.csv")
 
 class DataExplorer:
-    def __init__(self, df, limit=100):
-        self.df_full = df
-        self._df = df.head(limit)
+    def __init__(self, df: pd.DataFrame, limit:int | None = 100):
+        self.df_full = df.copy()
+        self._df = df.head(limit) if limit else df   
+
+    @property
+    def df(self) -> pd.DataFrame:
+        return self._df
+    
+    def head(self, n: int = 100):
+        self._df = self.df_full.head(n)
+        return self
 
     def summary(self):
-        self._df = self.df_full.describe().T.reset_index()
+        self._df = self.df_full.describe(include= "all").T.reset_index()
         return self
+    
+    def kpis(self):
+        df = self.df_full
+
+        return {
+            "n_trips": int(len(df)),
+            "total_km": float(df["Trip_Distance_km"].sum()),
+            "avg_km_per_trip": float(df["Trip_Distance_km"].mean()),
+            "total_revenue": float(df["Trip_Price"].sum())
+        }
+    
 
     def json_response(self):
         json_data = self._df.to_json(orient="records")

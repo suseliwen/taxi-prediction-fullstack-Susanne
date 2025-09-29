@@ -20,10 +20,15 @@ joblib
 - [X] Exportera datan med hjälp av joblib
 
 ##### **Uppgift 3 -  Backend och API-lager**
-Skapa en backend och ett API-lager i FastAPI som ska servea datan. Det innebär att det ska finnas olika
+Skapa en backend och ett API-lager i FastAPI som ska serva datan. Det innebär att det ska finnas olika
 endpoints för att kunna läsa delar av datan. Det ska också finnas möjlighet att göra prediktion genom att
 låta användaren mata in olika parametrar.
-- [ ] Vilka endpoints ska jag ha?
+- [ ] Vilka endpoints ska jag ha? CRUD - Create, Read, Update, Delete (Excecute?!)
+- [ ] GET-enpoints (summary, limited taxi-data, all taxi-data)
+- [ ] POST-endpoints
+- [ ] PUT-endpoints
+- [ ] DELETED-endpoints
+
 
 
 ##### **Uppgift 4 -   Bygg en frontend**
