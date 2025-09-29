@@ -2,6 +2,7 @@ from fastapi import FastAPI, Query, APIRouter
 from fastapi.responses import RedirectResponse          #Används för att omdirigera root ("/") till docs
 from taxipred.backend.data_processing import TaxiData
 from pydantic import BaseModel, Field
+from typing import Literal
 from contextlib import asynccontextmanager
 import pandas as pd
 from taxipred.utils.constants import DATA_PATH, MODELS_PATH
@@ -10,14 +11,18 @@ import joblib
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.df = pd.read_csv(DATA_PATH /"cleaned_taxi_trip_pricing.csv" )
-    app.state.df = app.state.df.round(2)
+    app.state.df = pd.read_csv(DATA_PATH /"cleaned_taxi_trip_pricing.csv").round(2)
 
+    bundle = joblib.load(MODELS_PATH / "taxi_price_pipeline.joblib")
+    app.state.pipe = bundle["pipeline"]
+    app.state.feature_order = bundle["feature_order"]
     yield
+   
     del app.state.df
+    del app.state.pipe
+    del app.state.feature_order
 
 router = APIRouter(prefix = "/api")
-
 app = FastAPI(lifespan= lifespan)           #Skapar en FastAPI-applikation
 taxi_data = TaxiData()                      #En instans av TaxiData-klassen, som hanterar taxidatan
 
@@ -27,18 +32,18 @@ class UserInput(BaseModel):
     Trip_Distance_km: float = Field(gt= 1, lt= 150)
     Time_of_Day:  str
     Day_of_Week:  str
-    Passenger_Count:  int = Field(gt= 1, lt= 4)
+    Passenger_Count:  int = Field(gt= 0, lt= 5)
     Traffic_Conditions:  str
     Weather: str
-    Base_Fare:  float = Field(gt= 2, lt= 5)
+    Base_Fare:  float = Field(gt= 0, lt= 5)
     Per_Km_Rate:  float = Field(gt= 0.5, lt= 2)
     Per_Minute_Rate:  float = Field(gt= 0.1, lt= 0.5)
-    Trip_Duration_Minutes:  float = Field(gt= 5, lt= 120)
+    Trip_Duration_Minutes:  float = Field(gt= 2, lt= 120)
 
 #response schema
 class PredictionResponse(BaseModel):
     predicted_price: float
-  
+ 
 
 
 @router.get("/", include_in_schema=False)
@@ -74,11 +79,10 @@ async def get_kpis():
 #prediction endpoint
 @router.post("/predict", response_model= PredictionResponse)
 def predict_price(payload: UserInput):
-    data_to_predict = pd.DataFrame(payload.model_dump(), index = [0])
-    rfreg = joblib.load(MODELS_PATH / "taxi_price_regressor.joblib")
-    prediction = rfreg.predict(data_to_predict)
-    return {"predicted_price": float(prediction[0])}
-
+    row = {k: getattr(payload, k) for k in app.state.feature_order}
+    X = pd.DataFrame([row])
+    y_hat = app.state.pipe.predict(X)[0]
+    return {"predicted_price": float(y_hat)}
 
              
 
@@ -88,8 +92,6 @@ async def read_taxi_data():
     Hämtar taxidatan och returnerar den som JSON.
     """            
     return taxi_data.to_json()
-
-
 
 
 
