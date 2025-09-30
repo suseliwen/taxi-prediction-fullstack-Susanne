@@ -46,7 +46,7 @@ class PredictionResponse(BaseModel):
  
 
 
-@router.get("/", include_in_schema=False)
+@app.get("/", include_in_schema=False)
 async def root():
     """ 
     Root-endpoint==> omdirigerar automatiskt till /docs  
