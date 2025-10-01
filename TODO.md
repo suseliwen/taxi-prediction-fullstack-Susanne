@@ -24,8 +24,8 @@ Skapa en backend och ett API-lager i FastAPI som ska serva datan. Det innebär a
 endpoints för att kunna läsa delar av datan. Det ska också finnas möjlighet att göra prediktion genom att
 låta användaren mata in olika parametrar.
 - [ ] Vilka endpoints ska jag ha? CRUD - Create, Read, Update, Delete (Excecute?!)
-- [ ] GET-enpoints (summary, limited taxi-data, all taxi-data)
-- [ ] POST-endpoints
+- [X] GET-enpoints (summary, limited taxi-data, all taxi-data)
+- [X] POST-endpoints (predict price - en med inmatning från användare och en med alla variabler)
 - [ ] PUT-endpoints
 - [ ] DELETED-endpoints
 
@@ -33,7 +33,14 @@ låta användaren mata in olika parametrar.
 
 ##### **Uppgift 4 -   Bygg en frontend**
 Bygg en snygg frontend och konsumera API:et.
-- [ ] .
+- [ ] En prediktion, baserat på användarens inmatning (påbörjat, inte klar.)
+- [ ] fritextfält för att fylla i varifrån man vill åka, och destination
+- [ ] Räknare som räknar ut antal kilometer
+- [ ] Koppling till väderleks app, som talar om vilket väder det är de närmaste 10 dagarna?
+- [ ] Metrics som visar vilket tid eller datum som det är billigast respektive dyrast att åka.
+- [ ] Nice to have - spara info om användrae
+
+
 
 
 ##### **Uppgift 5 - Videopitch**
