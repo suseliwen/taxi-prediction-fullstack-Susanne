@@ -24,7 +24,7 @@ def main():
     st.markdown("# Taxi Prediction Dashboard")
     data = read_api_endpoint("/api")
     df = pd.DataFrame(data.json())
-    st.dataframe(df)
+    #st.dataframe(df)
 
     st.subheader("Testa en prediktion!")
 
@@ -40,7 +40,7 @@ def main():
         per_minute = st.number_input("Per Minute Rate", min_value=0.1, max_value=0.5, step=0.1)
         duration = st.number_input("Trip Duration (min)", min_value=2.0, max_value=120.0, step=1.0)
 
-        submitted = st.form_submit_button("Predict price 🚕")
+        submitted = st.form_submit_button("Predict price")
 
         if submitted:
             payload = {

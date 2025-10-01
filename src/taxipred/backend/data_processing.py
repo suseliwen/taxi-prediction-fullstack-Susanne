@@ -4,7 +4,7 @@ import json
 from fastapi.responses import  JSONResponse
 from pprint import pprint
 
-df = pd.read_csv(DATA_PATH / "cleaned_taxi_trip_pricing.csv")
+df = pd.read_csv(DATA_PATH / "taxi_clean.csv")
 
 class DataExplorer:
     def __init__(self, df: pd.DataFrame, limit:int | None = 100):

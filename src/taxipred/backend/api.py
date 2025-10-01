@@ -11,16 +11,11 @@ import joblib
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.df = pd.read_csv(DATA_PATH /"cleaned_taxi_trip_pricing.csv").round(2)
-
-    bundle = joblib.load(MODELS_PATH / "taxi_price_pipeline.joblib")
-    app.state.pipe = bundle["pipeline"]
-    app.state.feature_order = bundle["feature_order"]
+    app.state.df = pd.read_csv(DATA_PATH / "taxi_clean.csv").round(2)
+    app.state.model = joblib.load(MODELS_PATH / "taxi_price_regressor_new.joblib")
     yield
-   
     del app.state.df
-    del app.state.pipe
-    del app.state.feature_order
+    del app.state.model
 
 router = APIRouter(prefix = "/api")
 app = FastAPI(lifespan= lifespan)           #Skapar en FastAPI-applikation
@@ -76,15 +71,14 @@ async def get_kpis():
     data = DataExplorer(app.state.df)
     return data.kpis()
 
-#prediction endpoint
-@router.post("/predict", response_model= PredictionResponse)
+@router.post("/predict", response_model=PredictionResponse)
 def predict_price(payload: UserInput):
-    row = {k: getattr(payload, k) for k in app.state.feature_order}
+    row = payload.model_dump()   
     X = pd.DataFrame([row])
-    y_hat = app.state.pipe.predict(X)[0]
+    y_hat = app.state.model.predict(X)[0]
     return {"predicted_price": float(y_hat)}
 
-             
+            
 
 @router.get("/taxi")
 async def read_taxi_data(): 
@@ -92,7 +86,6 @@ async def read_taxi_data():
     Hämtar taxidatan och returnerar den som JSON.
     """            
     return taxi_data.to_json()
-
 
 
 
