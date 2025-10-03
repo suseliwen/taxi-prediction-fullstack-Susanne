@@ -27,10 +27,33 @@ def predict_price_user(distance_km: float, passengers: int, departure_dt: dateti
 
 
 def main():
-    with st.sidebar:
-        st.radio("Select one:", [1, 2])
+    
+    with st.sidebar:        
+        st.subheader("Beställ din resa här!")
+        st.selectbox(
+            "Välj upphämtningsställe: ",
+            ("Skriv in en adress")
+        )
+        st.selectbox(
+            "Välj avlämningsplats: ",
+            ("Skriv in en adress")
+        )
+        st.selectbox(
+            "Välj avresetid: ",
+            ("Skriv in vilken tid du vill åka")
+        )
+        st.selectbox(
+            "Välj antal passagerare: ",
+            ("1-4 passagerare", "5-7 passagerare")
+        )
+        st.text("Resan beräknas kost XX kr")
+        st.divider()
+        
+
+  
 
     st.markdown("# Taxi Prediction Dashboard")
+    st.divider()
     data = read_api_endpoint("/api/rows")
     df = pd.DataFrame(data.json())
 
@@ -39,6 +62,7 @@ def main():
     col1.metric("My metric", 42, 2)
     col2.metric("My metric", 42, -5)
     col3.metric("My metric", 42, +10)
+    st.divider()
 
     
   

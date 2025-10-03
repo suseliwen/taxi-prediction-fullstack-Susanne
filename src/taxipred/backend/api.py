@@ -12,6 +12,8 @@ import datetime
 from dateutil import parser
 from zoneinfo import ZoneInfo
 import joblib
+from geopy.geocoders import Nominatim
+from geopy import distance
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -58,6 +60,8 @@ class PredictionAuditResponse(BaseModel):
     traffic_used: str
     time_of_day_used: str
     day_of_week_used: str
+
+
  
 
 
@@ -137,10 +141,7 @@ async def predict_from_user(payload: PredictUserInput):
         "day_of_week_used": dow,
     }
  
-
-
-
-            
+           
 
 @router.get("/taxi")
 async def read_taxi_data(): 
