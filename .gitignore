@@ -206,7 +206,14 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# OSRM artefakter
+# OSRM / OSM
 *.osm.pbf
 *.osrm
 *.osrm.*
+*.fileIndex
+*.hsgr
+*.edges
+*.nodes
+*.core
+*.geometry
+*.timestamp
