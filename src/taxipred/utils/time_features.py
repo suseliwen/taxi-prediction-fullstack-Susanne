@@ -4,14 +4,14 @@ def traffic_condition(dt: datetime) -> str:
     weekday = dt.weekday()
     hour = dt.hour    
 
-    if weekday < 5:  # Måndag–fredag
+    if weekday < 5:     # Måndag–fredag
         if 6 <= hour < 10 or 15 <= hour < 18:
             return "High"
         elif 10 <= hour < 15 or 18 <= hour < 21:
             return "Medium"
         else:
             return "Low"
-    else:  # Lördag–söndag
+    else:               # Lördag–söndag
         if 11 <= hour < 18:
             return "Medium"
         else:

@@ -62,7 +62,6 @@ class PredictionAuditResponse(BaseModel):
     day_of_week_used: str
 
 
- 
 
 
 @app.get("/", include_in_schema=False)
