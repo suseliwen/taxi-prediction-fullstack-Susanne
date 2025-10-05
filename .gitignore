@@ -217,3 +217,5 @@ __marimo__/
 *.core
 *.geometry
 *.timestamp
+
+.streamlit/secrets.toml
