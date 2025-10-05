@@ -94,6 +94,8 @@ class PredictionAuditResponse(BaseModel):
     traffic_used: str
     time_of_day_used: str
     day_of_week_used: str
+    distance_km_calc: float
+    duration_min_calc: float
 
 def calc_distance(gmaps_client, origin_address, destination_address):
     if not gmaps_client:

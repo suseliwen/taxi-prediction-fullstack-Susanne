@@ -33,12 +33,14 @@ låta användaren mata in olika parametrar.
 
 ##### **Uppgift 4 -   Bygg en frontend**
 Bygg en snygg frontend och konsumera API:et.
-- [ ] En prediktion, baserat på användarens inmatning (påbörjat, inte klar.)
-- [ ] fritextfält för att fylla i varifrån man vill åka, och destination
-- [ ] Räknare som räknar ut antal kilometer
-- [ ] Koppling till väderleks app, som talar om vilket väder det är de närmaste 10 dagarna?
-- [ ] Metrics som visar vilket tid eller datum som det är billigast respektive dyrast att åka.
-- [ ] Nice to have - spara info om användrae
+- [X] En prediktion, baserat på användarens inmatning ()
+- [X] fritextfält för att fylla i varifrån man vill åka, och destination
+- [X] Räknare som räknar ut antal kilometer
+- [ ] En karta för snyggare visualiseringen (borde gå att få med google maps...)  
+
+- [-] Koppling till väderleks app, som talar om vilket väder det är de närmaste 10 dagarna? - Kommer inte göra
+- [-] Metrics som visar vilket tid eller datum som det är billigast respektive dyrast att åka. - Kommer inte göra
+- [-] Nice to have - spara info om användare - Kommer inte göra
 
 
 

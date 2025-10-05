@@ -11,11 +11,14 @@ API_BASE = "http://127.0.0.1:8000"
 TZ = ZoneInfo("Europe/Stockholm")
 
 
-st.set_page_config(layout="centered", page_title="TaxiPris Prediktion")
-st.title("Taxipris Prediktor")
+st.title("Taxipriset - Vad kostar din resa?")
 st.divider()
 
 def predict_price_user(origin_address: str, destination_address: str, passengers: int, departure_dt: datetime):
+    
+    if departure_dt.tzinfo is None or departure_dt.tzinfo.utcoffset(departure_dt) is None:
+        departure_dt = departure_dt.replace(tzinfo=TZ)
+
     payload = {
         "origin_address": origin_address,
         "destination_address": destination_address,
@@ -23,89 +26,80 @@ def predict_price_user(origin_address: str, destination_address: str, passengers
         "departure_iso": departure_dt.isoformat(),  # t.ex. "2025-10-07T07:30:00"
     }  
       
-    url = f"{API_BASE}/api/predict"
+    url = f"{API_BASE}/api/predict_route"
     try:
         r = requests.post(url, json=payload, timeout=10)
         r.raise_for_status()
         return r.json()
+        
     except requests.RequestException as e:
-        st.error(f"Kunde inte anropa API:t: {e}")
+        st.error(f"Kunde inte anropa API:t: {e}")        
         return None
 
-
-
 def main():
-    
+
+    default_origin = "Göteborgs Centralstation"
+    default_destination = "Landvetter Flygplats"
+            
     with st.sidebar:        
-        st.subheader("Beräkna din resa här!")
-        st.selectbox(
-            "Välj upphämtningsställe: ",
-            ("Skriv in en adress")
-        )
-        st.selectbox(
-            "Välj avlämningsplats: ",
-            ("Skriv in en adress")
-        )
-        st.selectbox(
-            "Välj avresetid: ",
-            ("Skriv in vilken tid du vill åka")
-        )
-        st.selectbox(
-            "Välj antal passagerare: ",
-            ("1-4 passagerare", "5-7 passagerare")
-        )
-        st.text("Resan beräknas kost XX kr")
-        st.divider()
+        st.subheader("Beräkna priset för din resa här!")
+
+        with st.form("sidebar_prediction_form"):
+                
+                origin_address = st.text_input("Skriv in adressen du vill åka **från**:", value = default_origin)
+            
+                destination_address = st.text_input("Skriv in adressen du vill åka **till**:", value = default_destination)     
+
+                departure_date =st.date_input("Avresedag: ", value = date.today())
+
+                departure_time = st.time_input("Avresetid: ", value=dtime(hour= 8, minute= 0))
+
+                passengers = st.slider("Antal Passagerare:", 1, 4, 1, step=1, help="Du kan beräkna pris för upp till 4 passagerare")
+
+                submitted = st.form_submit_button("Beräkna pris för resan")         
+      
+        st.divider()     
+
+
+   
+    if submitted:
+
+        departure_dt = datetime.combine(departure_date, departure_time)
+
+        
+        result = predict_price_user(origin_address, destination_address, passengers, departure_dt)
+
+        if result:
+            price_sek = result['predicted_price']
+            distance_km = result['distance_km_calc']
+            duration_minutes = result['duration_min_calc']
+            
+            st.success("Priset beräknat!")
+           
+            st.subheader(f"Din resa beräknas att kosta {price_sek:,.2f} kr")       
+           
+            st.subheader("Utökad information om beräkningen")
+            
+            
+            col_1, col_2, col_3 = st.columns(3)
+            
+            with col_1:
+                st.metric("Beräknat Avstånd", f"{distance_km:.2f} km")
+                
+            with col_2:
+                st.metric("Beräknad Restid", f"{duration_minutes:.0f} min")
+
+            with col_3:
+                st.markdown(f"""
+                **Tidpunkt:** {result['time_of_day_used']}
+                
+                **Veckodag:** {result['day_of_week_used']}
+                
+                **Trafiksituation:** {result['traffic_used']}
+                """)        
         
 
-  
-
-   
-   
-    data = read_api_endpoint("/api/rows")
-    df = pd.DataFrame(data.json())
-
-    col1, col2, col3 = st.columns(3)
-
-    col1.metric("My metric", 42, 2)
-    col2.metric("My metric", 42, -5)
-    col3.metric("My metric", 42, +10)
-    st.divider()
-
-    
-  
-
-    st.subheader("Testa en prediktion!")
-
-    with st.form("taxi_form"):
-        distance = st.number_input("Trip Distance (km)", min_value=1.5, max_value=150.0, step=0.1)
-        passengers = st.number_input("Passenger Count", min_value=1, max_value=4, step=1)
-
-        dep_date = st.date_input("Departure date", value=date.today())
-        dep_time = st.time_input("Departure time", value=dtime(hour=8, minute=0))
-
-        submitted = st.form_submit_button("Predict price")
-
-    if submitted:
-        try:
-            departure_dt = datetime.combine(dep_date, dep_time)  # naiv → backend sätter Europe/Stockholm
-            result = predict_price_user(distance, passengers, departure_dt)
-
-            # Visa resultat
-            st.success(f"Predikterat pris: {result['predicted_price']:.2f} kr")
-            st.caption(
-                f"Antaganden: Traffic={result['traffic_used']} • "
-                f"TimeOfDay={result['time_of_day_used']} • "
-                f"DayOfWeek={result['day_of_week_used']}"
-)
-
-        except requests.RequestException as e:
-            st.error(f"Kunde inte anropa API:t: {e}")
-        except KeyError:
-            st.error("Oväntat svar från API:t. Kontrollera backend-loggen.") 
-
-
-    #st.dataframe(df.head())
+ #st.dataframe(df.head())
 
 if __name__ == '__main__':
     main()
