@@ -12,8 +12,17 @@ import datetime
 from dateutil import parser
 from zoneinfo import ZoneInfo
 import joblib
-from geopy.geocoders import Nominatim
-from geopy import distance
+import googlemaps
+import toml
+from pathlib import Path
+# from geopy.geocoders import Nominatim
+# from geopy import distance
+
+PROJECT_ROOT = Path.cwd()
+SECRETS_FILE = PROJECT_ROOT /'secrets.toml'
+secrets = toml.loads(SECRETS_FILE.read_text())
+GOOGLE_API_KEY = secrets['google_api_key']
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -60,7 +69,6 @@ class PredictionAuditResponse(BaseModel):
     traffic_used: str
     time_of_day_used: str
     day_of_week_used: str
-
 
 
 
