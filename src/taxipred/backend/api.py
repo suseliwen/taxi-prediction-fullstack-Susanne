@@ -22,10 +22,30 @@ SECRETS_FILE_PATH = Path(__file__).parent.parent.parent / 'frontend' / '.streaml
 
 
 
+SECRETS_FILE_PATH = Path(__file__).parent.parent.parent.parent / 'src' / 'taxipred' / 'frontend' / '.streamlit' / 'secrets.toml'
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+   
+    if SECRETS_FILE_PATH.exists():
+        secrets = toml.loads(SECRETS_FILE_PATH.read_text())     #Hämtar api-nyckel från secrets
+       
+        google_api_key = secrets.get('google_api_key')          #skapar en variabel av api-nyckeln
+        
+        if google_api_key:
+            app.state.gmaps = googlemaps.Client(key=google_api_key)
+            print("INFO: === Google Maps klient initialiserad ===")
+        else:
+            app.state.gmaps = None
+            print("VARNING: NÅGOT GICK FEL! 'google_api_key' saknas i secrets.toml.")
+    else:
+        app.state.gmaps = None
+        print(f"VARNING: secrets.toml hittades inte på sökväg: {SECRETS_FILE_PATH}. Avståndsberäkning kommer att misslyckas.")
+
     app.state.df = pd.read_csv(DATA_PATH / "taxi_clean.csv").round(2)
     app.state.model = joblib.load(MODELS_PATH / "taxi_price_regressor_new.joblib")
+
     yield
     del app.state.df
     del app.state.model
@@ -34,6 +54,15 @@ router = APIRouter(prefix = "/api")
 app = FastAPI(lifespan= lifespan)           #Skapar en FastAPI-applikation
 taxi_data = TaxiData()                      #En instans av TaxiData-klassen, som hanterar taxidatan
 TZ = ZoneInfo("Europe/Stockholm")
+
+
+#request schema som hanterar adresser från google maps
+class PredictUserRoute(BaseModel):
+    origin_address: str
+    destination_address: str
+    passenger_count: int = Field(gt= 0, lt= 5)
+    departure_iso: str  # => ISO8601-datetime, som hämtas från frontend (Streamlit)
+
 
 #requst schema - prisprediktion baserat på alla variabler
 class PricePrediction(BaseModel):    
@@ -52,8 +81,6 @@ class PricePrediction(BaseModel):
 class PredictionResponse(BaseModel):
     predicted_price: float
 
-
-
 #request schema - prediktion baserat på användarens input
 class PredictUserInput(BaseModel):
     trip_distance_km: float = Field( gt= 1, lt= 150)
@@ -68,7 +95,32 @@ class PredictionAuditResponse(BaseModel):
     time_of_day_used: str
     day_of_week_used: str
 
+def calc_distance(gmaps_client, origin_address, destination_address):
+    if not gmaps_client:
+        raise HTTPException(status_code= 503, detail="Google Maps-klient är inte initialiserad. Kontrollera API-nyckeln!")
+    
+    try:
+         result = gmaps_client.distance_matrix(
+            origins=[origin_address],
+            destinations=[destination_address],
+            mode="driving",
+            language="sv"
+        )
+         
+         element = result['rows'][0]['elements'][0]
 
+         if element['status'] == "OK":
+            distance_km = element['distance']['value'] / 1000.0
+            duration_minutes = element['duration']['value'] / 60.0
+
+            return distance_km, duration_minutes
+         else:
+            raise HTTPException(status_code=404, detail=f"Kunde inte hitta en giltig rutt. Kontrollera adresser. Status: {element['status']}")
+    
+    except Exception as e:
+       
+        raise HTTPException(status_code=500, detail=f"Internt API-fel vid ruttberäkning: {e}")
+             
 
 @app.get("/", include_in_schema=False)
 async def root():
@@ -112,22 +164,29 @@ async def predict_raw(payload: PricePrediction):
         raise HTTPException(400, f"Feature mismatch: {e}")
     return {"predicted_price": y_hat}
 
-# Endpoint som gör prediktion baserat på användarens inmatning 
-@router.post("/predict", response_model=PredictionAuditResponse)
-async def predict_from_user(payload: PredictUserInput):
-    """ Tar in uppgifter från användern vid prediktion. 
-    Använd följande datumformat vid test: 2025-10-07T07:30:00
+# Endpoint som gör prediktion baserat på användarens inmatning - nu med avståndsberäkning med google maps API (löst med hjälp av gemini...)
+@router.post("/predict_route", response_model=PredictionAuditResponse)
+async def predict_from_route(payload: PredictUserRoute):
+    """ Tar in uppgifter adress, passagerare och tidpunkt från användaren för prisprediktion. 
+    OBS! Använd följande format för inmatning av tid: 2025-10-07T07:30:00
     """
+    gmaps_client = app.state.gmaps
+
+    distance_km, duration_minutes = calc_distance(
+        gmaps_client,
+        payload.origin_address,
+        payload.destination_address
+    )
 
     dt = parser.isoparse(payload.departure_iso).replace(tzinfo=TZ)
-
     tod = time_of_day(dt)
     dow = day_of_week_label(dt)
     traffic = traffic_condition(dt)
 
     # Bygg en PricePrediction – använd defaults för det som inte anges
     price_input = PricePrediction(
-        Trip_Distance_km=payload.trip_distance_km,
+        Trip_Distance_km=distance_km,
+        Trip_Duration_Minutes=duration_minutes,        
         Passenger_Count=payload.passenger_count,
         Time_of_Day=tod,
         Day_of_Week=dow,
@@ -144,8 +203,9 @@ async def predict_from_user(payload: PredictUserInput):
         "traffic_used": traffic,
         "time_of_day_used": tod,
         "day_of_week_used": dow,
+        "distance_km_calc": distance_km,
+        "duration_min_calc": duration_minutes
     }
- 
            
 
 @router.get("/taxi")

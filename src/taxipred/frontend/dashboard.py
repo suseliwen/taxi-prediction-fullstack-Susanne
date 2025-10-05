@@ -4,13 +4,21 @@ from taxipred.utils.helpers import read_api_endpoint
 import pandas as pd
 import requests
 from datetime import date, time as dtime, datetime
+from zoneinfo import ZoneInfo
+
 
 API_BASE = "http://127.0.0.1:8000"
+TZ = ZoneInfo("Europe/Stockholm")
 
 
-def predict_price_user(distance_km: float, passengers: int, departure_dt: datetime):
+st.set_page_config(layout="centered", page_title="TaxiPris Prediktion")
+st.title("Taxipris Prediktor")
+st.divider()
+
+def predict_price_user(origin_address: str, destination_address: str, passengers: int, departure_dt: datetime):
     payload = {
-        "trip_distance_km": float(distance_km),
+        "origin_address": origin_address,
+        "destination_address": destination_address,
         "passenger_count": int(passengers),
         "departure_iso": departure_dt.isoformat(),  # t.ex. "2025-10-07T07:30:00"
     }  
@@ -29,7 +37,7 @@ def predict_price_user(distance_km: float, passengers: int, departure_dt: dateti
 def main():
     
     with st.sidebar:        
-        st.subheader("Beställ din resa här!")
+        st.subheader("Beräkna din resa här!")
         st.selectbox(
             "Välj upphämtningsställe: ",
             ("Skriv in en adress")
@@ -52,8 +60,8 @@ def main():
 
   
 
-    st.markdown("# Taxi Prediction Dashboard")
-    st.divider()
+   
+   
     data = read_api_endpoint("/api/rows")
     df = pd.DataFrame(data.json())
 
