@@ -18,10 +18,8 @@ from pathlib import Path
 # from geopy.geocoders import Nominatim
 # from geopy import distance
 
-PROJECT_ROOT = Path.cwd()
-SECRETS_FILE = PROJECT_ROOT /'secrets.toml'
-secrets = toml.loads(SECRETS_FILE.read_text())
-GOOGLE_API_KEY = secrets['google_api_key']
+SECRETS_FILE_PATH = Path(__file__).parent.parent.parent / 'frontend' / '.streamlit' / 'secrets.toml'
+
 
 
 @asynccontextmanager

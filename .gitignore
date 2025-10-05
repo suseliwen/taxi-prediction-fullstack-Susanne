@@ -218,4 +218,5 @@ __marimo__/
 *.geometry
 *.timestamp
 
-.streamlit/secrets.toml
+# Ignorera secrets.toml i frontend-mappen
+src/taxipred/frontend/.streamlit/secrets.toml
