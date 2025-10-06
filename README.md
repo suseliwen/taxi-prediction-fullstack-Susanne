@@ -9,8 +9,6 @@
 
 <hr style="margin: 30px 0;">
 
----
-
 ### Syfte och projektbeskrivning
 Resekollen Taxi är en applikation som predikterar priset för en taxiresa, baserat på användarens inmatningar.   
 Projektet demonstrerar hur backend, frontend och maskininlärning kan integreras i en lösning. 
@@ -44,8 +42,12 @@ Api-et behöver vara igång för att preditionerna ska kunna hämtas till fronte
 - #### Klona repot   
 
 - #### Skapa och aktivera en virtuell miljö
-    1. python -m venv venv
-    2. source venv/Scripts/activate  (Windows (Bash)) | source venv/bin/activate (Mac/Linux)   
+    ##### Skapa virtuell miljö:  
+    python -m venv venv
+    ##### Aktivera virtuell miljö: 
+    - Windows (bash) - source venv/Scripts/activate   
+    - Mac/Linux - source venv/bin/activate  
+    
   
 - #### Installera beroenden via requirements.txt
     - uv pip install -r requirements.txt   
