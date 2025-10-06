@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 from datetime import date, time as dtime, datetime
 from zoneinfo import ZoneInfo
-
+import urllib.parse, streamlit as st
 
 API_BASE = "http://127.0.0.1:8000"
 TZ = ZoneInfo("Europe/Stockholm")
@@ -13,6 +13,7 @@ TZ = ZoneInfo("Europe/Stockholm")
 
 st.title("Taxipriset - Vad kostar din resa?")
 st.divider()
+
 
 def predict_price_user(origin_address: str, destination_address: str, passengers: int, departure_dt: datetime):
     
@@ -96,7 +97,14 @@ def main():
                 **Veckodag:** {result['day_of_week_used']}
                 
                 **Trafiksituation:** {result['traffic_used']}
-                """)        
+                """)   
+
+    origin = urllib.parse.quote_plus(origin_address)
+    dest   = urllib.parse.quote_plus(destination_address)
+    key    = st.secrets["GMAPS_EMBED_KEY"]
+
+    url = f"https://www.google.com/maps/embed/v1/directions?key={key}&origin={origin}&destination={dest}&mode=driving"
+    st.components.v1.iframe(url, width=800, height=520)     
         
 
  #st.dataframe(df.head())
