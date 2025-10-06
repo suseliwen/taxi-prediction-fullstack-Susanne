@@ -1,6 +1,6 @@
 
 <h1 align="center">🚖 Resekollen Taxi</h1>
-Backend | Frontend | ML
+<h3 align= "center"> Backend | Frontend | ML </h3>
 
 <p align="center">
   <i>Pris­prediktion av taxiresor med FastAPI, Streamlit och Maskininlärning</i><br>
@@ -43,20 +43,20 @@ Api-et behöver vara igång för att preditionerna ska kunna hämtas till fronte
 ### Kör appen
 - #### Klona repot   
 
-- ##### Skapa och aktivera en virtuell miljö
+- #### Skapa och aktivera en virtuell miljö
     1. python -m venv venv
     2. source venv/Scripts/activate  (Windows (Bash)) | source venv/bin/activate (Mac/Linux)   
   
-- ##### Installera beroenden via requirements.txt
+- #### Installera beroenden via requirements.txt
     - uv pip install -r requirements.txt   
 
-- ##### Starta api:et/backend
+- #### Starta api:et/backend
     - Öppna en ny terminal
     - Aktivera den vituella miljön
     - cd src/taxipred/backend
     - uvicorn api:app --reload   
 
-- ##### Starta streamlit/frontend
+- #### Starta streamlit/frontend
     - Öppna en ny terminal
     - Aktivera den vituella miljön
     - cd src/taxipred/frontend
