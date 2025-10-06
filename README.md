@@ -1,25 +1,36 @@
 
-### Resekollen Taxi – Pris­prediktion 
+<h1 align="center">🚖 Resekollen Taxi</h1>
 Backend | Frontend | ML
 
-#### Skolprojekt i kursen *'Objektorienterad programmering avancerad 1"* (OPA24GB) 
-*NBI/Handelsakademin* 
+<p align="center">
+  <i>Pris­prediktion av taxiresor med FastAPI, Streamlit och Maskininlärning</i><br>
+  <sub>Skolprojekt – NBI/Handelsakademin 2024</sub>
+</p>
 
-#### Syfte och projektbeskrivning
+<hr style="margin: 30px 0;">
+
+---
+
+### Syfte och projektbeskrivning
 Resekollen Taxi är en applikation som predikterar priset för en taxiresa, baserat på användarens inmatningar.   
 Projektet demonstrerar hur backend, frontend och maskininlärning kan integreras i en lösning. 
 - Datan hämtas från en CSV-fil som innehåller historiska taxiresor.
 - Backend och frontend kommunicerar via ett API. 
 - En maskininlärningsmodell (Random Forest Regression) används för att prediktera kostnaden för resan baserat på tidpunkt, avstånd och andra faktorer.
 
-#### Teknisk översikt
-Backend - FastAPI – tar emot användardata och anropar ML-modellen   
-Frontend - Streamlit – användargränssnitt för inmatning och resultat   
-ML-modell - Random Forest Regressor, tränad på historiska taxiresor   
-Karttjänster - Google Distance Matrix API (avstånd) + Maps Embed API (visualisering)  
-Data - CSV-fil med fält som avstånd, restid, tidpunkt, pris m.m.   
+---
 
-#### Förutsättningar och viktigt att veta innan du kör applikationen
+### Teknisk översikt
+| Komponent | Ramverk | Funktion |
+|------------|----------|----------|
+| Backend | FastAPI | Hanterar API och logik |
+| Frontend | Streamlit | Interaktivt användargränssnitt |
+| ML-modell | scikit-learn (Random Forest) | Predikterar pris |
+| Kartor | Google Maps APIs | Hämtar avstånd och visar rutt |  
+
+---
+
+### Förutsättningar och viktigt att veta innan du kör applikationen
 Du behöver två API-nycklar för att kunna köra applikationen: 
 - Skapa eller hämta nycklar via Google Cloud Console. 
 - Aktivera "Distance Matrix API" för den ena nyckeln. 
@@ -28,8 +39,9 @@ Du behöver två API-nycklar för att kunna köra applikationen:
 
 Api-et behöver vara igång för att preditionerna ska kunna hämtas till frontend
 
-#### Kör appen
-- ##### Klona repot   
+---
+### Kör appen
+- #### Klona repot   
 
 - ##### Skapa och aktivera en virtuell miljö
     1. python -m venv venv
@@ -40,11 +52,13 @@ Api-et behöver vara igång för att preditionerna ska kunna hämtas till fronte
 
 - ##### Starta api:et/backend
     - Öppna en ny terminal
+    - Aktivera den vituella miljön
     - cd src/taxipred/backend
     - uvicorn api:app --reload   
 
 - ##### Starta streamlit/frontend
     - Öppna en ny terminal
+    - Aktivera den vituella miljön
     - cd src/taxipred/frontend
     - streamlit run dashboard.py
  
