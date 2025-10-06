@@ -31,7 +31,7 @@ async def lifespan(app: FastAPI):
     if SECRETS_FILE_PATH.exists():
         secrets = toml.loads(SECRETS_FILE_PATH.read_text())     #Hämtar api-nyckel från secrets
        
-        google_api_key = secrets.get('google_api_key')          #skapar en variabel av api-nyckeln
+        google_api_key = secrets.get('GOOGLE_API_KEY')          #skapar en variabel av api-nyckeln
         
         if google_api_key:
             app.state.gmaps = googlemaps.Client(key=google_api_key)

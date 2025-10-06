@@ -12,6 +12,7 @@ TZ = ZoneInfo("Europe/Stockholm")
 
 
 st.title("Taxipriset - Vad kostar din resa?")
+
 st.divider()
 
 
@@ -65,9 +66,7 @@ def main():
    
     if submitted:
 
-        departure_dt = datetime.combine(departure_date, departure_time)
-
-        
+        departure_dt = datetime.combine(departure_date, departure_time)        
         result = predict_price_user(origin_address, destination_address, passengers, departure_dt)
 
         if result:

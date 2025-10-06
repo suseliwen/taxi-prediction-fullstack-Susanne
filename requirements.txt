@@ -9,3 +9,4 @@ pydantic
 streamlit
 geopy
 python-dateutil
+googlemaps==4.10.0

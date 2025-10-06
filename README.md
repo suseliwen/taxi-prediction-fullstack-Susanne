@@ -29,22 +29,33 @@ Projektet demonstrerar hur backend, frontend och maskininlärning kan integreras
 ---
 
 ### Förutsättningar och viktigt att veta innan du kör applikationen
-Du behöver två API-nycklar för att kunna köra applikationen: 
-- Skapa eller hämta nycklar via Google Cloud Console. 
-- Aktivera "Distance Matrix API" för den ena nyckeln. 
-- Aktivera "Maps Embed API" för den andra nyckeln. 
-- Spara dina api-nycklar i .streamlit/sercrets.toml
+**För att appen ska fungera behöver du två Google API-nycklar:**
 
-Api-et behöver vara igång för att preditionerna ska kunna hämtas till frontend
+- Distance Matrix API (för avståndsberäkning i backend)
+- Maps Embed API (för kartvisning i frontend)
+
+Skapa/hämta nycklar i Google Cloud Console och aktivera respektive API för dem.
+Rekommendation: begränsa nycklarna (HTTP-referers/domäner, IP, etc.).
+
+Placera nycklarna i en secrets.toml. 
+
+Skapa filen i frontendens Streamlit-katalog:
+- src/taxipred/frontend/.streamlit/secrets.toml
+
+Innehåll (exempel):
+GOOGLE_MAPS_API_KEY = "din-distance-matrix-nyckel"
+GOOGLE_MAPS_EMBED_KEY = "din-maps-embed-nyckel"
+
+**Api-et behöver vara igång för att preditionerna ska kunna hämtas till frontend**
 
 ---
 ### Kör appen
 - #### Klona repot   
 
 - #### Skapa och aktivera en virtuell miljö
-    ##### Skapa virtuell miljö:  
+    #### *Skapa virtuell miljö*:  
     python -m venv venv
-    ##### Aktivera virtuell miljö: 
+    #### *Aktivera virtuell miljö*: 
     - Windows (bash) - source venv/Scripts/activate   
     - Mac/Linux - source venv/bin/activate  
     
@@ -54,13 +65,13 @@ Api-et behöver vara igång för att preditionerna ska kunna hämtas till fronte
 
 - #### Starta api:et/backend
     - Öppna en ny terminal
-    - Aktivera den vituella miljön
-    - cd src/taxipred/backend
+    - Aktivera den virtuella miljön
+    - Kör följande i terminalen: cd src/taxipred/backend
     - uvicorn api:app --reload   
 
 - #### Starta streamlit/frontend
     - Öppna en ny terminal
-    - Aktivera den vituella miljön
-    - cd src/taxipred/frontend
+    - Aktivera den virtuella miljön
+    - Kör följande i terminalen: cd src/taxipred/frontend
     - streamlit run dashboard.py
  

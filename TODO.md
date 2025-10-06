@@ -23,7 +23,7 @@ joblib
 Skapa en backend och ett API-lager i FastAPI som ska serva datan. Det innebär att det ska finnas olika
 endpoints för att kunna läsa delar av datan. Det ska också finnas möjlighet att göra prediktion genom att
 låta användaren mata in olika parametrar.
-- [ ] Vilka endpoints ska jag ha? CRUD - Create, Read, Update, Delete (Excecute?!)
+- Vilka endpoints ska jag ha? CRUD - Create, Read, Update, Delete
 - [X] GET-enpoints (summary, limited taxi-data, all taxi-data)
 - [X] POST-endpoints (predict price - en med inmatning från användare och en med alla variabler)
 - [ ] PUT-endpoints
