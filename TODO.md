@@ -84,6 +84,7 @@ När ett steg får godkänt resultat bockar jag i kryssrutan och skriver in vad 
 - [X] Starta upp frontend/Streamlit och testa att appen ger ett resultat
     - Kan lägga in olika adresser, och får en prediktion samt vägbeskrivning i kartan. 
     - Prediktionerna stämmer dock inte så jättebra - tid på dygn gör väldigt lite både för pris och tidsåtgång. 
+  
 
 
 

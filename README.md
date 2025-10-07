@@ -56,7 +56,7 @@ Spara nycklarna i secrets.toml (se steg 4 nedan).
 
   
 ### 3) Installera beroenden via requirements.txt 
-*Viktigt: starta från projekt-roten (cd taxi-prediktion-fullstack-Susanne)*   
+*Viktigt: starta från projekt-roten (cd taxi-prediction-fullstack-Susanne)*   
    
     pip install -r requirements.txt   
 
@@ -71,7 +71,7 @@ Skapa filen i frontendens Streamlit-katalog:
   - GOOGLE_MAPS_EMBED_KEY = "din-maps-embed-nyckel"   
 
 ### 5) Starta api:et/backend
-*Kontrollera att du står i projektroten: (cd taxi-prediktion-fullstack-Susanne)* 
+*Kontrollera att du står i projektroten: (cd taxi-prediction-fullstack-Susanne)* 
   - Öppna en ny terminal   
   - Aktivera den virtuella miljön:   
      ```bash
@@ -79,6 +79,9 @@ Skapa filen i frontendens Streamlit-katalog:
   - starta backend/api:   
     ```bash   
     uvicorn taxipred.backend.api:app --reload --app-dir src   
+
+Observera - api:et behöver vara igång så läge du kör applikationen. 
+Du stänger api:et i terminalen (ctrl + C)
 
 ### 6) Starta streamlit/frontend
 *Kontrollera att du står i projektroten: (cd taxi-prediktion-fullstack-Susanne)* 
