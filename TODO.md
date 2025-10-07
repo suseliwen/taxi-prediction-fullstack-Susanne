@@ -30,18 +30,18 @@ låta användaren mata in olika parametrar.
 - [ ] DELETED-endpoints
 
 
-
 ##### **Uppgift 4 -   Bygg en frontend**
 Bygg en snygg frontend och konsumera API:et.
 - [X] En prediktion, baserat på användarens inmatning ()
 - [X] fritextfält för att fylla i varifrån man vill åka, och destination
 - [X] Räknare som räknar ut antal kilometer
-- [ ] En karta för snyggare visualiseringen (borde gå att få med google maps...)  
+- [X] En karta för snyggare visualiseringen (borde gå att få med google maps...) 
+
+- [ ] Felmeddelande när användaren lägger in avstånd över 120 alt 150 mil
 
 - [-] Koppling till väderleks app, som talar om vilket väder det är de närmaste 10 dagarna? - Kommer inte göra
 - [-] Metrics som visar vilket tid eller datum som det är billigast respektive dyrast att åka. - Kommer inte göra
 - [-] Nice to have - spara info om användare - Kommer inte göra
-
 
 
 
@@ -50,3 +50,16 @@ Spela in dig och själv och skärmen - ex mha teams, obs eller liknande verktyg.
 applikationen och presentera övergripande hur din kod fungerar. Videon ska vara 5-10 min lång och skickas
 in till lärplattformen.
 - [ ] .
+
+
+
+##### **=============== TEST=============**
+Följ steget i README.md. Funkar respektive steg?
+- [ ] Klona repot
+- [ ] Skapa virtuell miljö
+- [ ] Skapa secerets.toml och lägg in API-nycklar
+- [ ] Starta upp backend och testa API via uvicorn
+- [ ] Starta upp frontend/Streamlit och testa att appen ger ett resultat
+
+
+

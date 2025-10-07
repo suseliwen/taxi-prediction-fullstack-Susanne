@@ -38,18 +38,6 @@ Projektet demonstrerar hur backend, frontend och maskininlärning kan integreras
 Skapa/hämta nycklar i Google Cloud Console och aktivera respektive API för dem.   
 *Rekommendation: begränsa nycklarna (HTTP-referers/domäner, IP, etc.).*
 
-Lägg nycklarna i en secrets.toml. 
-Skapa filen i frontendens Streamlit-katalog:
- ````
- -  mkdir -p src/taxipred/frontend/.streamlit
- -  touch src/taxipred/frontend/.streamlit/secrets.toml
-````
-  - GOOGLE_MAPS_API_KEY = "din-distance-matrix-nyckel"      
-  - GOOGLE_MAPS_EMBED_KEY = "din-maps-embed-nyckel"   
-
-*Filen checkas inte in i Git. Lägg gärna i .gitignore:*    
-src/taxipred/frontend/.streamlit/secrets.toml
-
 
 ---
 # Kör appen
@@ -62,16 +50,28 @@ src/taxipred/frontend/.streamlit/secrets.toml
     python -m venv venv
 
 - **Aktivera  virtuell miljö**:     
-    ```bash
+    ```bash    
     source venv/Scripts/activate      # Windows (bash)      
-    source venv/bin/activate           # Mac/Linux      
+    source venv/bin/activate          # Mac/Linux      
 
   
-### 3) Installera beroenden via requirements.txt   
-        - pip install -r requirements.txt   
+### 3) Installera beroenden via requirements.txt 
+*Viktigt: starta från projekt-roten (cd taxi-prediktion-fullstack-Susanne)*
+    ```bash    
+    pip install -r requirements.txt   
 
-### 4) Starta api:et/backend
-*Viktigt: starta från projektroten och ange --app-dir src* 
+### 4) Skapa secrets.toml och spara API-nycklarna
+Skapa filen i frontendens Streamlit-katalog:
+    ```bash   
+    mkdir -p src/taxipred/frontend/.streamlit
+    touch src/taxipred/frontend/.streamlit/secrets.toml
+
+  Lägg till följande i secrets:  
+  - GOOGLE_MAPS_API_KEY = "din-distance-matrix-nyckel"      
+  - GOOGLE_MAPS_EMBED_KEY = "din-maps-embed-nyckel"   
+
+### 5) Starta api:et/backend
+*Kontrollera att du står i projektroten: (cd taxi-prediktion-fullstack-Susanne)* 
   - Öppna en ny terminal   
   - Aktivera den virtuella miljön:   
      ```bash
@@ -80,7 +80,8 @@ src/taxipred/frontend/.streamlit/secrets.toml
     ```bash   
     uvicorn taxipred.backend.api:app --reload --app-dir src   
 
-### 5) Starta streamlit/frontend
+### 6) Starta streamlit/frontend
+*Kontrollera att du står i projektroten: (cd taxi-prediktion-fullstack-Susanne)* 
   - Öppna en ny terminal   
   - Aktivera den virtuella miljön:   
      ```bash
