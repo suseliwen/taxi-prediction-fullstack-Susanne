@@ -76,7 +76,7 @@ Skapa filen i frontendens Streamlit-katalog:
   - Aktivera den virtuella miljön:   
      ```bash
     source venv/Scripts/activate   
-  - starta backend/api:   
+  - Starta backend/api:   
     ```bash   
     uvicorn taxipred.backend.api:app --reload --app-dir src   
 
@@ -89,7 +89,7 @@ Du stänger api:et i terminalen (ctrl + C)
   - Aktivera den virtuella miljön:   
      ```bash
     source venv/Scripts/activate   
-  - starta frontend/Streamlit:   
+  - Starta frontend/Streamlit:   
     ```bash   
     streamlit run src/taxipred/frontend/dashboard.py
  

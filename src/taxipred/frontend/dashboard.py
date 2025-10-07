@@ -10,10 +10,27 @@ API_BASE = "http://127.0.0.1:8000"
 TZ = ZoneInfo("Europe/Stockholm")
 
 
-st.title("Taxipriset - Vad kostar din resa?")
+# --------------- Grundlayout---------------------
+
+st.set_page_config(
+    page_title="Taxipriset - Vad kostar din resa?",    
+    page_icon="🚖",
+    layout="wide",
+)
+
+st.markdown("""
+<style>
+.block-card {border:1px solid #eee;border-radius:16px;padding:16px;margin:8px 0;background: #fff;}
+.small {font-size:0.9rem; color:#6b7280}
+</style>
+""", unsafe_allow_html=True)
+
+st.title("🚖 Taxipriset -  Vad kostar din resa?")
+st.subheader("Beräkna ett uppskattat pris och få en snabb översikt över sträcka, tid och förutsättningar.")
 
 st.divider()
 
+# --------------- API-anrop ---------------------
 
 def predict_price_user(origin_address: str, destination_address: str, passengers: int, departure_dt: datetime):
     
@@ -37,29 +54,60 @@ def predict_price_user(origin_address: str, destination_address: str, passengers
         st.error(f"Kunde inte anropa API:t: {e}")        
         return None
 
-def main():
 
-    default_origin = "Göteborgs Centralstation"
-    default_destination = "Landvetter Flygplats"
+# --------------- Main ---------------------
+def main():    
             
     with st.sidebar:        
         st.subheader("Beräkna priset för din resa här!")
 
         with st.form("sidebar_prediction_form"):
                 
-                origin_address = st.text_input("Skriv in adressen du vill åka **från**:", value = default_origin)
+                origin_address = st.text_input(
+                    "Skriv in adressen du vill åka **från**:",
+                    key = "origin_address",
+                    value =  st.session_state.get("origin_address", "Göteborgs Centralstation")
+                )
             
-                destination_address = st.text_input("Skriv in adressen du vill åka **till**:", value = default_destination)     
+                destination_address = st.text_input(
+                    "Skriv in adressen du vill åka **till**:",
+                    key = "destination_address",
+                    value =  st.session_state.get("destination_address", "Landvetter flygplats")
+                )     
 
-                departure_date =st.date_input("Avresedag: ", value = date.today())
+                departure_date =st.date_input(
+                    "Avresedag: ",
+                    key = "departure_date", 
+                    value = st.session_state.get("departure_date", date.today())
+                )
 
-                departure_time = st.time_input("Avresetid: ", value=dtime(hour= 8, minute= 0))
+                departure_time = st.time_input(
+                    "Avresetid: ",
+                    key = "departure_time",
+                    value = st.session_state.get("departure_time", dtime(hour=8, minute=0))
+                )
 
-                passengers = st.slider("Antal Passagerare:", 1, 4, 1, step=1, help="Du kan beräkna pris för upp till 4 passagerare")
+                passengers = st.slider(
+                    "Antal Passagerare:", 1, 4, 1, step=1, 
+                    key = "passengers",
+                    help="Du kan beräkna pris för upp till 4 passagerare"
+                )
 
-                submitted = st.form_submit_button("Beräkna pris för resan")         
+                col_a, col_b = st.columns(2)
+
+                with col_a: 
+                    submitted = st.form_submit_button("Beräkna pris")   
+
+                with col_b:                                  
+                    clear =st.form_submit_button("Töm sökfält")    
       
-        st.divider()     
+        st.divider()    
+
+        if clear:
+            for key in ["origin_address", "destination_address", "departure_date", "departure_time", "passengers"]:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.rerun() 
 
 
    
@@ -103,7 +151,7 @@ def main():
 
     url = f"https://www.google.com/maps/embed/v1/directions?key={key}&origin={origin}&destination={dest}&mode=driving"
     st.components.v1.iframe(url, width=800, height=520)     
-        
+    
 
  #st.dataframe(df.head())
 

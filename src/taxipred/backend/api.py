@@ -19,10 +19,7 @@ from pathlib import Path
 # from geopy import distance
 
 SECRETS_FILE_PATH = Path(__file__).parent.parent.parent / 'frontend' / '.streamlit' / 'secrets.toml'
-
-
-
-SECRETS_FILE_PATH = Path(__file__).parent.parent.parent.parent / 'src' / 'taxipred' / 'frontend' / '.streamlit' / 'secrets.toml'
+#SECRETS_FILE_PATH = Path(__file__).parent.parent.parent.parent / 'src' / 'taxipred' / 'frontend' / '.streamlit' / 'secrets.toml'
 
 
 @asynccontextmanager
@@ -75,7 +72,7 @@ class PricePrediction(BaseModel):
     Base_Fare: float = Field(default=2.5, gt=0, lt=5)
     Per_Km_Rate: float = Field(default=1.2, gt=0.5, lt=2)
     Per_Minute_Rate: float = Field(default=0.3, gt=0.1, lt=0.5)
-    Trip_Duration_Minutes: float = Field(default=15.0, gt=2, lt=120)
+    Trip_Duration_Minutes: float = Field(default=15.0, gt=2, lt=500)
 
 #response schema - prisprediktion baserat på alla variabler
 class PredictionResponse(BaseModel):
@@ -83,7 +80,7 @@ class PredictionResponse(BaseModel):
 
 #request schema - prediktion baserat på användarens input
 class PredictUserInput(BaseModel):
-    trip_distance_km: float = Field( gt= 1, lt= 150)
+    trip_distance_km: float = Field( gt= 1, lt= 500)
     passenger_count: int = Field(gt= 0, lt= 5)
     departure_iso: str  # => ISO8601-datetime, som hämtas från frontend (Streamlit)
 
