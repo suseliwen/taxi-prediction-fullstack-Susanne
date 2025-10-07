@@ -42,7 +42,7 @@ Spara nycklarna i secrets.toml (se steg 4 nedan).
 ---
 # Kör appen
 ### 1) Klona repot
-    https://github.com/suseliwen/taxi-prediction-fullstack-Susanne.git 
+    git clone https://github.com/suseliwen/taxi-prediction-fullstack-Susanne.git 
 
 ### 2) Skapa och aktivera en virtuell miljö      
 - **Skapa virtuell miljö**:
