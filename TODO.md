@@ -53,13 +53,37 @@ in till lärplattformen.
 
 
 
-##### **=============== TEST=============**
-Följ steget i README.md. Funkar respektive steg?
-- [ ] Klona repot
-- [ ] Skapa virtuell miljö
-- [ ] Skapa secerets.toml och lägg in API-nycklar
-- [ ] Starta upp backend och testa API via uvicorn
-- [ ] Starta upp frontend/Streamlit och testa att appen ger ett resultat
+##### **=============== TEST =============**
+***Teststrategi***  
+Jag har klonat repot från GitHub och testat att köra programmet utifrån beskrivningen i ReadMe.   
+Om jag har fått något problem i det klonade repot har jag identifierat och åtgärdat problemet.    
+Jag har därefter uppdaterat ReadMe, slängt det klonade repot och börjat om på nytt.   
+När ett steg får godkänt resultat bockar jag i kryssrutan och skriver in vad som inte funkat och hur det åtgärdats.  
+
+---------------
+
+- [X] Klona repot => Inga problem
+
+- [X] Skapa virtuell miljö
+
+- [X]  Installera requirements
+    - Måste stå i rätt folder i terminalen...
+    - Uppdterar ReadMen eftersom det är lätt att glömma bort.   
+
+- [X] Skapa secerets.toml och lägg in API-nycklar 
+    - Ändrar i ReadMe, så instruktioner för att skapa folder & fil kommer i rätt ordning. 
+
+- [X] Starta upp backend och testa API via uvicorn
+    - Funkar inte att köra från src/taxipred/backend som jag är van!
+    - Behöver köras från projektroten pga src-layouten - hittar inte texipred. 
+    - Efter felsökning med hjälp av chatGPT förstår jag att jag behöver köra uvicorn taxipred.backend.api:app --reload --app-dir src för att det ska funka.
+    - Uppdaterar ReadMe med informationen. 
+    - Betonar i ReadMe att api:et behöver vara igång för att frontend ska funka. 
+    - Lägger också till hur man ska avsluta programmet. 
+
+- [X] Starta upp frontend/Streamlit och testa att appen ger ett resultat
+    - Kan lägga in olika adresser, och får en prediktion samt vägbeskrivning i kartan. 
+    - Prediktionerna stämmer dock inte så jättebra - tid på dygn gör väldigt lite både för pris och tidsåtgång. 
 
 
 
