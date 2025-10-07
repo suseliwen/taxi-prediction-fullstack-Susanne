@@ -31,13 +31,13 @@ Projektet demonstrerar hur backend, frontend och maskininlärning kan integreras
 # Förutsättningar och viktigt att veta innan du kör applikationen
 
 ## **API-nycklar behövs för att köra applikationen**
-### Appen behöver två API-nycklar.
+#### Appen behöver två API-nycklar.
 - Distance Matrix API (för avståndsberäkning i backend)
 - Maps Embed API (för kartvisning i frontend)
 
 Skapa/hämta nycklar i Google Cloud Console och aktivera respektive API för dem.   
+Spara nycklarna i secrets.toml (se steg 4 nedan). 
 *Rekommendation: begränsa nycklarna (HTTP-referers/domäner, IP, etc.).*
-
 
 ---
 # Kör appen
@@ -56,13 +56,13 @@ Skapa/hämta nycklar i Google Cloud Console och aktivera respektive API för dem
 
   
 ### 3) Installera beroenden via requirements.txt 
-*Viktigt: starta från projekt-roten (cd taxi-prediktion-fullstack-Susanne)*
-    ```bash    
+*Viktigt: starta från projekt-roten (cd taxi-prediktion-fullstack-Susanne)*   
+   
     pip install -r requirements.txt   
 
 ### 4) Skapa secrets.toml och spara API-nycklarna
-Skapa filen i frontendens Streamlit-katalog:
-    ```bash   
+Skapa filen i frontendens Streamlit-katalog:   
+    
     mkdir -p src/taxipred/frontend/.streamlit
     touch src/taxipred/frontend/.streamlit/secrets.toml
 
