@@ -184,13 +184,13 @@ async def predict_from_route(payload: PredictUserRoute):
     if distance_km >= MAX_KM:
         raise HTTPException(
             status_code=400,
-            detail=f"Resan är {distance_km:.1f} km, vilket överstiger maxlängden {MAX_KM:.0f} km. Ange en annan destination."
+            detail=f"Resan är {distance_km:.1f} km, vilket överstiger maxlängden {MAX_KM:.0f} km. Ange en annan destination." #detail = hämtas som felmeddelande i frontend!
         )
     
     if distance_km <= MIN_KM:
         raise HTTPException(
             status_code=400,
-            detail=f"Resan är för kort ({distance_km:.1f} km). Minimilängd är {MIN_KM:.0f} km. Ange en annan destination"
+            detail=f"Resan är för kort ({distance_km:.1f} km). Minimilängd är {MIN_KM:.0f} km. Ange en annan destination"   
         )
 
     dt = parser.isoparse(payload.departure_iso).replace(tzinfo=TZ)

@@ -54,19 +54,19 @@ def predict_price_user(origin_address: str, destination_address: str, passengers
                 
                 if isinstance(detail, list) and detail:
                     first = detail[0]
-                    message = (
+                    err_txt = (
                         first.get("msg")            #standard FastAPI/Pydantic
                         or first.get("detail")      #fallback
                         or str(first)
                     )               
                 
                 else:
-                    message = str(detail)   #Om'detail' är en sträng (t.ex. egen HTTPException)
+                    err_txt = str(detail)   #Om'detail' är en sträng (t.ex. egen HTTPException)
 
             except Exception:
-                message = r.text 
+                err_txt = r.text 
             
-            st.error(f"Fel i indata: {message}")
+            st.error(f"Fel i indata: {err_txt}")
             return None
         
         if not r.ok:    #felhantering om svar är andra 4xx/5xx-fel

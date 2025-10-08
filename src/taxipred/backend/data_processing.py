@@ -1,5 +1,5 @@
 import pandas as pd
-from taxipred.utils.constants import DATA_PATH, MODELS_PATH
+from taxipred.utils.constants import DATA_PATH
 import json
 from fastapi.responses import  JSONResponse
 from pprint import pprint
