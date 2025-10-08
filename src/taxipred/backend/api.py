@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Query, APIRouter, HTTPException
 from fastapi.responses import RedirectResponse          #Används för att omdirigera root ("/") till docs
 from taxipred.backend.data_processing import TaxiData
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from contextlib import asynccontextmanager
 import pandas as pd
 from taxipred.utils.constants import DATA_PATH, MODELS_PATH
@@ -18,8 +18,8 @@ from pathlib import Path
 # from geopy.geocoders import Nominatim
 # from geopy import distance
 
-SECRETS_FILE_PATH = Path(__file__).parent.parent.parent / 'frontend' / '.streamlit' / 'secrets.toml'
-#SECRETS_FILE_PATH = Path(__file__).parent.parent.parent.parent / 'src' / 'taxipred' / 'frontend' / '.streamlit' / 'secrets.toml'
+
+SECRETS_FILE_PATH = Path(__file__).parent.parent.parent.parent / 'src' / 'taxipred' / 'frontend' / '.streamlit' / 'secrets.toml'
 
 
 @asynccontextmanager
@@ -63,7 +63,7 @@ class PredictUserRoute(BaseModel):
 
 #requst schema - prisprediktion baserat på alla variabler
 class PricePrediction(BaseModel):    
-    Trip_Distance_km: float = Field(gt=1, lt=150)
+    Trip_Distance_km: float = Field(gt=1, lt=200)
     Time_of_Day: str
     Day_of_Week: str
     Passenger_Count: int = Field(gt=0, lt=5)
@@ -72,7 +72,7 @@ class PricePrediction(BaseModel):
     Base_Fare: float = Field(default=2.5, gt=0, lt=5)
     Per_Km_Rate: float = Field(default=1.2, gt=0.5, lt=2)
     Per_Minute_Rate: float = Field(default=0.3, gt=0.1, lt=0.5)
-    Trip_Duration_Minutes: float = Field(default=15.0, gt=2, lt=500)
+    Trip_Duration_Minutes: float = Field(default=15.0, gt=2, lt=300)
 
 #response schema - prisprediktion baserat på alla variabler
 class PredictionResponse(BaseModel):
@@ -80,11 +80,11 @@ class PredictionResponse(BaseModel):
 
 #request schema - prediktion baserat på användarens input
 class PredictUserInput(BaseModel):
-    trip_distance_km: float = Field( gt= 1, lt= 500)
+    trip_distance_km: float = Field( gt= 1, lt= 200)
     passenger_count: int = Field(gt= 0, lt= 5)
     departure_iso: str  # => ISO8601-datetime, som hämtas från frontend (Streamlit)
 
-
+   
 #response schema - prisprediktion baserat på användarens input
 class PredictionAuditResponse(BaseModel):
     predicted_price: float
@@ -171,11 +171,27 @@ async def predict_from_route(payload: PredictUserRoute):
     """
     gmaps_client = app.state.gmaps
 
+    MAX_KM = 200.0
+    MIN_KM = 1.0
+
     distance_km, duration_minutes = calc_distance(
         gmaps_client,
         payload.origin_address,
         payload.destination_address
     )
+
+    # Fel till klienten (kod: 400) om sträckan är utanför gränserna
+    if distance_km >= MAX_KM:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Resan är {distance_km:.1f} km, vilket överstiger maxlängden {MAX_KM:.0f} km. Ange en annan destination."
+        )
+    
+    if distance_km <= MIN_KM:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Resan är för kort ({distance_km:.1f} km). Minimilängd är {MIN_KM:.0f} km. Ange en annan destination"
+        )
 
     dt = parser.isoparse(payload.departure_iso).replace(tzinfo=TZ)
     tod = time_of_day(dt)
